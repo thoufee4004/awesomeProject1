@@ -1,14 +1,23 @@
 <html>
 <head>
     <title>login</title>
-    This is page
+    This is Login page
+    <div class="box-title">
+        <h3 class="heading">
+
+        </h3>
+    </div>
 </head>
 <body style="background: grey">
 <h1>Login</h1>
-<form method="post" action="index.html"style="background-image: radial-gradient(black)">
-    username<input type="text" value="username" /><br>
-    password<input type="password" value="password"/><br>
-    <input type="submit" value="Login">
+
+<form style="alignment: center" method="post" action="index.html" >
+    username:  <input type="text" value="" /><br>
+    password:  <input type="password" value=""/><br>
+        <button type="submit" value="Login" formaction="/account/index/login/welcome">
+            Sign in
+    </button>
+    {{.err}}
 </form>
 </body>
 </html>

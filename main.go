@@ -2,6 +2,7 @@ package main
 
 import (
 	"awesomeProject1/controllers/accountcontroller"
+	"log"
 	"net/http"
 )
 
@@ -24,9 +25,12 @@ func handlerFunc(w http.ResponseWriter, r *http.Request)  {
 func main()  {
 
 	http.HandleFunc("/account",accountcontroller.Index)
-	http.HandleFunc("/account/index",accountcontroller.Index)
-	http.HandleFunc("/account/login",accountcontroller.Login)
-	http.ListenAndServe("localhost:2000",nil)
+	http.HandleFunc("/account/index/login",accountcontroller.Login)
+	http.HandleFunc("/account/index/login/welcome",accountcontroller.Welcome)
+	err := http.ListenAndServe("localhost:8080", nil) // setting listening port
+	if err != nil {
+		log.Fatal("ListenAndServe: Not Listening..", err)
+	}
 }
 
 //input [1,2,3,4]
