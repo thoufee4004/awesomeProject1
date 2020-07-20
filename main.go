@@ -4,6 +4,7 @@ import (
 	"awesomeProject1/controllers/accountcontroller"
 	"log"
 	"net/http"
+	"os"
 )
 
 /*type Page struct {
@@ -22,12 +23,20 @@ func handlerFunc(w http.ResponseWriter, r *http.Request)  {
 	fmt.Fprint(w,"<h1>This is my page Thoufeek attempt1</h1>")
 
 }*/
-func main()  {
+func main() {
 
-	http.HandleFunc("/account",accountcontroller.Index)
-	http.HandleFunc("/account/index/login",accountcontroller.Login)
-	http.HandleFunc("/account/index/login/welcome",accountcontroller.Welcome)
-	err := http.ListenAndServe("localhost:8080", nil) // setting listening port
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = ":8080"
+	}
+	mux := http.NewServeMux()
+	//FileServerObj:= http.FileServer(http.Dir("assets"))
+	//mux.Handle("/assets/",http.StripPrefix("/assets/",FileServerObj))
+	mux.HandleFunc("/", accountcontroller.Index)
+	mux.HandleFunc("/account", accountcontroller.Welcome)
+	mux.HandleFunc("/account/login", accountcontroller.Login)
+
+	err := http.ListenAndServe(""+port, mux) // setting listening port
 	if err != nil {
 		log.Fatal("ListenAndServe: Not Listening..", err)
 	}
