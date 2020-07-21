@@ -30,11 +30,9 @@ func main() {
 		port = ":8080"
 	}
 	mux := http.NewServeMux()
-	//FileServerObj:= http.FileServer(http.Dir("assets"))
-	//mux.Handle("/assets/",http.StripPrefix("/assets/",FileServerObj))
+	FileServerObj:= http.FileServer(http.Dir("assets"))
+	mux.Handle("/assets/",http.StripPrefix("/assets/",FileServerObj))
 	mux.HandleFunc("/", accountcontroller.Index)
-	mux.HandleFunc("/account", accountcontroller.Welcome)
-	mux.HandleFunc("/account/login", accountcontroller.Login)
 
 	err := http.ListenAndServe(""+port, mux) // setting listening port
 	if err != nil {

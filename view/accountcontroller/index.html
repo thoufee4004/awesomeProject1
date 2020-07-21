@@ -1,23 +1,27 @@
 <html>
 <header>
     <title>login</title>
-    This is Index page
-    <div class="box-title">
-        <h3 class="heading">
-
-        </h3>
-    </div>
+    <link rel="stylesheet" type="text/css" href="../../assets/style.css">
+    Welcome to the Great Krikaalan Magic Show
 </header>
-<body style="background: grey">
-<h1>Login</h1>
+<body>
+<div class="loginbox">
+    <img src="../../assets/images.png" class="avatar">
+    <h1>Login</h1>
+    <form style="alignment: center" method="post" action="/" >
+        <p>username</p>
+        <input type="text"  name="username"  id="name" placeholder="Enter Username">
+        <br>
+        <p>password</p>
+        <input type="password" name="password" id="pwd" placeholder="Enter Password">
+        <br>
+        <input type="submit" value="Login">
+        <br>
+        <a href="#">Forgot password?</a><br>
+        <a href="#">Don't have an account?</a><br>
 
-<form style="alignment: center" method="post" action="/" >
-    username:  <input type="text" name="username"  id="name" /><br>
-    password:  <input type="password" name="password" id="pwd"/><br>
-        <button type="submit" value="Login" >
-            Sign in
-    </button>
-    {{.err}}
+    </form>
+</div>
 </form>
 </body>
 </html>

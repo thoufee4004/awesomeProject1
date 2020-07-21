@@ -2,40 +2,56 @@ package accountcontroller
 
 import (
 	"fmt"
+	"github.com/globalsign/mgo"
 	"html/template"
 	"log"
 	"net/http"
-	"pkg/mod/github.com/gorilla/sessions"
+	"pkg/mod/gopkg.in/mgo.v2@v2.0.0-20190816093944-a6b53ec6cb22/bson"
 )
-var store =sessions.NewCookieStore([]byte("mysession"))
+//var store =sessions.NewCookieStore([]byte("mysession"))
 var tpl=template.Must(template.ParseFiles("view/accountcontroller/index.html"))
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("<h1>thoufeek</h1>"))
-	tpl.Execute(w ,nil)
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-	fmt.Println("username", username)
-	fmt.Println("password", password)
-
-/*	if username == "asd" && password == "123" {
-		log.Printf("username", username)
-		session, _ := store.Get(r, "mysession")
-		session.Values["username"] = username
-		session.Values["password"] = password
-		fmt.Println("user", username)
-
-	} else {
-		log.Printf("invalid")
-		data := map[string]interface{}{
-			"err": "invalid",
-		}
-		temp, _ := template.ParseFiles("view/accountcontroller/index.html")
-		//http.Redirect(w,r,"view/accountcontroller/index",http.StatusSeeOther)
-		temp.Execute(w, data)
-	}*/
+	//w.Write([]byte("<h2>thoufeek</h2>"))
+	//temp, _ := template.ParseFiles("view/accountcontroller/index.html")
+	tpl.Execute(w, nil)
+	var username = r.FormValue("username")
+	var password = r.FormValue("password")
+	Authenticate(username,password)
 }
-func Login(w http.ResponseWriter, r *http.Request) {
+
+func Authenticate(username, password string) {
+	connection, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		return
+	}
+	type credentials struct {
+		Username   string     `bson:"username"`
+		Password   string        `bson:"password"`
+	}
+	var detailsfromfront =[]credentials{{username,password}}
+	log.Println(detailsfromfront)
+	data := connection.DB("Webpage").C("login")
+	//data:=connection.Copy()
+	fmt.Println("Connected to MongoDB!")
+	for _, value := range detailsfromfront {
+		in, _ := data.Upsert(value, value)
+		if in != nil {
+			fmt.Println(err)
+		}
+		detailsfromback:= []credentials{}
+		err:=data.Find(bson.M{}).All(&detailsfromback)
+		if err !=nil{
+			log.Println("detailsfromback",err)
+		}
+		if username ==  && password == password {
+			fmt.Println("success")
+		} else {
+			fmt.Println("invalid")
+		}
+	}
+}
+	func Login(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(r.Form)
 	log.Println("path", r.URL.Path)
@@ -48,7 +64,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	temp.Execute(w, nil)
 }
 
-func Welcome(w http.ResponseWriter, r *http.Request)  {
+/*func Welcome(w http.ResponseWriter, r *http.Request)  {
 	log.Printf("Welcome")
 	session,_:=store.Get(r,"mysession")
 	username:=session.Values["username"]
@@ -62,4 +78,4 @@ fmt.Println(username)
 
 	temp,_:=template.ParseFiles("view/accountcontroller/welcome.html")
 	temp.Execute(w,data)
-}
+}*/
