@@ -2,17 +2,21 @@ package accountcontroller
 
 import (
 	"fmt"
-	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"html/template"
+	"lingapos/server/db"
 	"log"
 	"net/http"
 )
-//var store =sessions.NewCookieStore([]byte("mysession"))
-//var tpl=template.Must(template.ParseFiles("view/accountcontroller/index.html"))
+
+type User struct{
+	UserId         bson.ObjectId `bson:"_id"`
+	Username       string      `bson:"username"`
+	Password       string      `bson:"password"`
+}
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	//w.Write([]byte("<h2>thoufeek</h2>"))
+
 	t,_:=template.ParseFiles("view/accountcontroller/index.html")
 	t.Execute(w,nil)
 	r.ParseForm()
@@ -23,11 +27,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func Authenticate(username, password string) {
-	connection, err := mgo.Dial("localhost:27017")
-	if err != nil {
-		return
-	}
-	defer connection.Close()
+
 	type credentials1 struct {
 		Username   string     `bson:"username"`
 		Password   string        `bson:"password"`
@@ -36,18 +36,21 @@ func Authenticate(username, password string) {
 		Username   string     `bson:"username"`
 		Password   string        `bson:"password"`
 	}
+	DBconnect()
+	session:= dbsession.Obj.Copy()
+	defer session.Close()
 	var detailsfromfront =[]credentials1{{username,password}}
 	log.Println(detailsfromfront)
-	data := connection.DB("Webpage").C("login")
+	data := session.DB("Webpage").C("login")
 	//data:=connection.Copy()
 	fmt.Println("Connected to MongoDB!")
 	for _, value := range detailsfromfront {
-		in, _ := data.Upsert(value, value)
+		in, err := data.Upsert(value, value)
 		if in != nil {
 			fmt.Println(err)
 		}
 		detailsfromback:= []credentials2{}
-		err:=data.Find(bson.M{}).All(&detailsfromback)
+		err = data.Find(bson.M{}).All(&detailsfromback)
 		if err !=nil{
 			log.Println("detailsfromback",err)
 		}
@@ -57,6 +60,29 @@ func Authenticate(username, password string) {
 			fmt.Println("invalid")
 		}
 	}
+}*/
+
+func CreateAccount (w http.ResponseWriter, r *http.Request) {
+
+	session:=db.Obj.Copy()
+	defer session.Close()
+	t,_:=template.ParseFiles("view/accountcontroller/createAccount.html")
+	t.Execute(w,nil)
+	r.ParseForm()
+	fmt.Println(r.Form)
+	user :=User{}
+	err:=session.DB("Webpage").C("login").Insert(user)
+	if err !=nil{
+		log.Println("err",err)
+	}
+
+	
+}
+func DeleteAccount (w http.ResponseWriter, r *http.Request) {
+	t,_:=template.ParseFiles("view/accountcontroller/deleteAccount.html")
+	t.Execute(w,nil)
+	r.ParseForm()
+	fmt.Println(r.Form)
 }
 /*	func Login(w http.ResponseWriter, r *http.Request) {
 
