@@ -1,12 +1,13 @@
 package accountcontroller
 
 import (
+	"awesomeProject1/DB"
 	"fmt"
 	"github.com/globalsign/mgo/bson"
 	"html/template"
-	"lingapos/server/db"
 	"log"
 	"net/http"
+
 )
 
 type User struct{
@@ -36,12 +37,12 @@ func Authenticate(username, password string) {
 		Username   string     `bson:"username"`
 		Password   string        `bson:"password"`
 	}
-	DBconnect()
-	session:= dbsession.Obj.Copy()
-	defer session.Close()
+	dbsession := DB.Obj.Copy()
+	defer dbsession.Close()
+
 	var detailsfromfront =[]credentials1{{username,password}}
 	log.Println(detailsfromfront)
-	data := session.DB("Webpage").C("login")
+	data := dbsession.DB("Webpage").C("login")
 	//data:=connection.Copy()
 	fmt.Println("Connected to MongoDB!")
 	for _, value := range detailsfromfront {
@@ -60,25 +61,39 @@ func Authenticate(username, password string) {
 			fmt.Println("invalid")
 		}
 	}
-}*/
-
-func CreateAccount (w http.ResponseWriter, r *http.Request) {
-
-	session:=db.Obj.Copy()
-	defer session.Close()
+}
+func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	t,_:=template.ParseFiles("view/accountcontroller/createAccount.html")
 	t.Execute(w,nil)
+
 	r.ParseForm()
 	fmt.Println(r.Form)
-	user :=User{}
-	err:=session.DB("Webpage").C("login").Insert(user)
+	log.Println("CreateAccount Page")
+
+	session:=DB.Obj.Copy()
+	defer session.Close()
+
+	type Signup struct {
+		Username    string `json:"username"`
+		Password    string `json:"password"`
+	} 
+	res :=make(map[string]interface{})
+	reg :=Signup{}
+	err:=session.DB("Webpage").C("login").Insert(reg)
 	if err !=nil{
 		log.Println("err",err)
 	}
+	var username = r.FormValue("username")
+	log.Println("username",username)
+	var password = r.FormValue("password")
+	log.Println("password",password)
+	res["name"]=Signup{Username: username,Password: password}
+	res["message"]="MESSAGE"
 
 	
 }
-func DeleteAccount (w http.ResponseWriter, r *http.Request) {
+
+func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 	t,_:=template.ParseFiles("view/accountcontroller/deleteAccount.html")
 	t.Execute(w,nil)
 	r.ParseForm()
