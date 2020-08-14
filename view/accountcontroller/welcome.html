@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" type="text/css" href="../../assets/style.css">
 <head>
     <meta charset="UTF-8">
     <title>WELCOME</title>
 </head>
 <body>
 <h3>This is login page</h3>
-WELCOME {{.username}}
+<br>
+WELCOME <br>
 if m, _ := regexp.MatchString(`^([\w\.\_]{2,10})@(\w{1,}).([a-z]{2,4})$`, r.Form.Get("email")); !m
 if m, _ := regexp.MatchString("^[a-zA-Z]+$", r.Form.Get("engname")); !m
 getint,err:=strconv.Atoi(r.Form.Get("age"))
 if m, _ := regexp.MatchString("^[0-9]+$", r.Form.Get("age")); !m
 if err!=nil
+
+<br>
+    <a href="/1">
+        <p>Goto Signup Page</p></a>
+
 </body>
 </html>

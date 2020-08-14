@@ -1,26 +1,29 @@
 <html>
-<header>
-    <title>Sign Up</title>
-    <link rel="stylesheet" type="text/css" href="../../assets/style.css">
-    Welcome to the Great Krikaalan Magic Show
-</header>
+<title>Sign Up</title>
+<link rel="stylesheet" type="text/css" href="../../assets/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<body ng-app="myApp" ng-controller="userCtrl">
+Welcome to the Great Krikaalan Magic Show<br>
 <body>
 <div class="loginbox">
     <img src="../../assets/images.png" class="avatar">
     <h1>Create Account</h1>
-    <form style="alignment: center" method="post" action="/signup" >
-        <p>Enter username</p>
-        <input type="text"  name="username"  id="name" placeholder="Enter Username">
+    <form style="alignment: center" method="post" action="/2">
+        <p>Username</p>
+        <input type="text"  ng-model="username"  placeholder="Enter Username" name="username" required>
         <br>
-        <p>Enter password</p>
-        <input type="password" name="password" id="pwd" placeholder="Enter Password">
+        <p>Password</p>
+        <input type="password" name="password" ng-model="password"  placeholder="Enter Password" required>
         <br>
-        <input type="submit" value="sign up">
+        <input type="password" name="confirmpassword" ng-model="confirmpassword" placeholder="Confirm Password" required>
         <br>
-        <a href="#">Login Page</a><br>
+        <button style="alignment: center !important;" type="submit" value="sign up" ng-disabled="error ||
+        incomplete" ng-click="accountcontroller.CreateAccount" href="/0">sign up</button>
+        <br>
+        <a href="/0">Login Page</a><br>
 
     </form>
 </div>
-</form>
+<script src= "account.js"></script>
 </body>
 </html>

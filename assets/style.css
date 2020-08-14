@@ -75,15 +75,31 @@ h1{
     color: black;
 }
 .loginbox a{
+    border: 40px;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 20px;
-    color: grey;
+    color: blueviolet;
+    font-weight: bolder;
 }
 .loginbox a:hover{
+    font-size: 18px;
+    color: darkblue;
+    font-weight: bolder;
+}
+.loginbox button[type="submit"]{
+    border: none;
+    outline: none;
+    height: 40px;
+    background: #fb2525;
+    color: #fff;
+    font-size: 20px;
+    padding: 0 40px 0;
+    border-radius: 20px;
+    
+}
+.loginbox button[type="submit"]:hover{
+    cursor: pointer;
+    background: darkgrey;
     color: black;
 }
-
-
-
-

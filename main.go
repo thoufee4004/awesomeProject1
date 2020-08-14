@@ -3,18 +3,13 @@ package main
 import (
 	"awesomeProject1/DB"
 	"awesomeProject1/routers"
-	"net/http"
 )
 
 
 func main() {
-	//CSS file
-
-	FileServerObj := http.FileServer(http.Dir("/assets/"))
-	http.Handle("/assets/", http.StripPrefix("/assets/", FileServerObj))
 
 	//db
-	DB.Obj = DB.DBconnect()
+	DB.DBconnect()
 	//routers
 	routers.Routeconfiguration()
 
