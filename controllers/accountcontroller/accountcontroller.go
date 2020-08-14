@@ -17,14 +17,30 @@ type User struct{
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
+	Name := r.FormValue("username") // Data from the form
+	pwd := r.FormValue("password")
+	cfmpwd := r.FormValue("confirmpassword")
+	fmt.Println(Name)
+	fmt.Println(pwd)
+	fmt.Println(cfmpwd)
 
-	t,_:=template.ParseFiles("view/accountcontroller/index.html")
-	t.Execute(w,nil)
-	r.ParseForm()
-	fmt.Println(r.Form)
-	var username = r.FormValue("username")
-	var password = r.FormValue("password")
-	Authenticate(username,password)
+	u := new(User)
+	u.Username = Name
+	u.Password = pwd
+	u.confirmpassword = cfmpwd
+	fmt.Println(*u)
+
+	t,err:=template.ParseFiles("view/accountcontroller/index.html")
+	if err != nil {
+		log.Println("parse error", err)
+	}
+	err=t.Execute(w,u)
+	if err != nil {
+		log.Println("Execute error", err)
+	}
+
+
+	//Authenticate(username,password)
 }
 
 func Authenticate(username, password string) {
@@ -73,23 +89,13 @@ func Welcome(w http.ResponseWriter, r *http.Request){
 }
 
 func CreateAccount(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("method", r.Method)
 	t, err := template.ParseFiles("view/accountcontroller/createAccount.html")
 	if err != nil {
 		log.Println("parse error", err)
 	}
-
-	Name := r.FormValue("username") // Data from the form
-	pwd := r.FormValue("password")
-	cfmpwd := r.FormValue("confirmpassword")
-	fmt.Println(Name)
-
-	u := new(User)
-	u.Username = Name
-	u.Password = pwd
-	u.confirmpassword = cfmpwd
-	fmt.Println(*u)
-	fmt.Println("method", r.Method)
-	err = t.Execute(w, &u)
+	err = t.Execute(w, nil)
 	if err != nil {
 		log.Println("execution error", err)
 	}

@@ -8,15 +8,15 @@
 <div class="loginbox">
     <img src="../../assets/images.png" class="avatar">
     <h1>Login</h1>
-    <form style="alignment: center" method="post" action="/login" >
+    <form style="alignment: center" method="post"  >
         <p>username</p>
-        <input type="text"  name="username"  id="name" placeholder="Enter Username">
+        {{.Username}}
+
         <br>
         <p>password</p>
-        <input type="password" name="password" id="pwd" placeholder="Enter Password">
+        {{.Password}}
         <br>
-        <input type="submit" value="Login">
-        <br>
+
         <a href="#">Forgot password?</a><br>
         <a href="#">Don't have an account?</a><br>
 
